@@ -80,7 +80,7 @@ app.get('/api/items/:id', async (req, res) => {
         amount: Math.floor(data.price),
         decimals: Number((data.price % 1).toFixed(2)) * 100, // Assuming 2 decimal places
       },
-      picture: data.thumbnail,
+      picture: data.pictures[0].url,
       condition: data.condition,
       free_shipping: data.shipping.free_shipping,
       initial_quantity: data.initial_quantity,
