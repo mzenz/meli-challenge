@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import axios from 'axios'
 const app = express()
 const port = 10000
@@ -11,12 +12,14 @@ const author = {
   lastname: 'Zenzerovich'
 }
 
-app.get('/health', (req, res) => {
-  res.json({status: 'healthy'})
-})
+app.use(cors())
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`API server listening on port ${port}`)
+})
+
+app.get('/health', (req, res) => {
+  res.json({status: 'healthy'})
 })
 
 app.get('/api/items', async (req, res) => {
@@ -29,7 +32,6 @@ app.get('/api/items', async (req, res) => {
     const filteredResults = doc.data.results.slice(0, maxItems)
 
     const categoriesObj = doc.data.available_filters.find(filter => filter.id === 'category')
-    console.debug(categoriesObj)
     let categories = []
     if (categoriesObj) {
       categories = categoriesObj.values.sort((a, b) => b.results - a.results).map(value => value.name)
@@ -53,7 +55,6 @@ app.get('/api/items', async (req, res) => {
       items,
     }
 
-    // console.debug(transformedData)
     res.json(transformedData)
   } catch (error) {
     console.error(error)
@@ -91,7 +92,6 @@ app.get('/api/items/:id', async (req, res) => {
       item,
     }
 
-    console.log(transformedData)
     res.json(transformedData)
   } catch (error) {
     console.error(error)
